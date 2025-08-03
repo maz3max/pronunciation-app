@@ -12,6 +12,7 @@ input.addEventListener("input", async () => {
     suggestions = [];
     selectedIndex = -1;
     suggestionsList.innerHTML = "";
+    input.classList.add("no-suggestions");
     return;
   }
 
@@ -39,6 +40,7 @@ input.addEventListener("keydown", async (e) => {
     const word = selectedIndex >= 0 ? suggestions[selectedIndex] : input.value.trim();
     if (word) {
       suggestionsList.innerHTML = "";
+      input.classList.add("no-suggestions");
       await getWordInfo(word);
     }
   }
@@ -48,16 +50,26 @@ suggestionsList.addEventListener("click", (e) => {
   if (e.target.tagName === "LI") {
     input.value = e.target.textContent;
     suggestionsList.innerHTML = "";
+    input.classList.add("no-suggestions");
     getWordInfo(e.target.textContent);
   } else if (e.key === "Escape") {
     selectedIndex = -1;
     suggestionsList.innerHTML = "";
+    input.classList.add("no-suggestions");
     // Optional: set input.value = previousTypedValue if you saved it
   }
 });
 
 function renderSuggestions() {
   suggestionsList.innerHTML = "";
+  
+  if (suggestions.length === 0) {
+    input.classList.add("no-suggestions");
+    return;
+  }
+  
+  input.classList.remove("no-suggestions");
+  
   suggestions.forEach((word, i) => {
     const li = document.createElement("li");
     li.textContent = word;
