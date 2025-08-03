@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Norwegian Pronunciation Lookup</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>🔊 Norwegian Pronunciation Lookup</h1>
+  
+  <div class="search-container">
+    <input type="text" id="search" placeholder="Type a word..." autocomplete="off" />
+    
+
+  </div>
+  
+  <ul id="suggestions"></ul>
+  <div id="result"></div>
+  <div class="dialect-selector">
+      <label for="dialectSelect">Choose Dialect:</label>
+      <select id="dialectSelect">
+        <option value="e_written">Eastern (Formal)</option>
+        <option value="e_spoken">Eastern (Spoken)</option>
+        <option value="n_written">Northern (Formal)</option>
+        <option value="n_spoken">Northern (Spoken)</option>
+        <option value="sw_written">South-Western (Formal)</option>
+        <option value="sw_spoken">South-Western (Spoken)</option>
+        <option value="t_written">Trøndelag (Formal)</option>
+        <option value="t_spoken">Trøndelag (Spoken)</option>
+        <option value="w_written">Western (Formal)</option>
+        <option value="w_spoken">Western (Spoken)</option>
+      </select>
+    </div>
+  <script src="script.js"></script>
+</body>
+</html>
+

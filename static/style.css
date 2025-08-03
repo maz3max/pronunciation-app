@@ -1,0 +1,246 @@
+/* Base styles */
+body { 
+  font-family: Arial, sans-serif; 
+  text-align: center; 
+  padding: 1rem; 
+  margin: 0;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* Main heading */
+h1 {
+  margin: 1rem 0;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+/* Search container */
+.search-container {
+  max-width: 600px;
+  margin: 0 auto 2rem auto;
+  padding: 0 1rem;
+}
+
+/* Dialect selector */
+.dialect-selector {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.dialect-selector label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+#dialectSelect {
+  width: min(300px, 90vw);
+  max-width: 100%;
+  padding: 8px 12px;
+  font-size: 1em;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  background-color: white;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+#dialectSelect:focus {
+  outline: none;
+  border-color: #007acc;
+}
+
+/* Search input - responsive width */
+#search { 
+  width: min(300px, 90vw);
+  max-width: 100%;
+  padding: 12px; 
+  font-size: 1.2em; 
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+#search:focus {
+  outline: none;
+  border-color: #007acc;
+}
+
+/* Suggestions list */
+#suggestions { 
+  list-style: none; 
+  padding: 0; 
+  max-width: min(300px, 90vw);
+  margin: 1rem auto; 
+  text-align: left;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+#suggestions li { 
+  background: #f0f0f0; 
+  padding: 12px; 
+  cursor: pointer;
+  border-bottom: 1px solid #ddd;
+  transition: background-color 0.2s ease;
+}
+
+#suggestions li:hover {
+  background-color: #e6e6e6;
+}
+
+#suggestions li.highlight {
+  background-color: #cce5ff;
+}
+
+#suggestions li:last-child {
+  border-bottom: none;
+}
+
+/* Form elements */
+select { 
+  margin: 0.5rem; 
+  font-size: 1em;
+  padding: 8px;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  max-width: 100%;
+}
+
+button { 
+  margin-top: 0.5rem; 
+  padding: 0.5rem 1rem; 
+  font-size: 1em;
+  border: 2px solid #007acc;
+  background-color: #007acc;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: #005a99;
+}
+
+/* Audio player */
+#audioEl {
+  margin-top: 1rem;
+  width: min(400px, 90vw);
+  max-width: 100%;
+}
+
+/* Result container */
+#result {
+  margin-top: 2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 1rem;
+  box-sizing: border-box;
+}
+
+/* Sentence display */
+#sentence {
+  font-style: italic;
+  margin: 1rem 0;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-left: 3px solid #007acc;
+  border-radius: 0 8px 8px 0;
+  text-align: left;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Labels */
+label {
+  display: block;
+  margin: 1rem 0 0.5rem 0;
+  font-weight: bold;
+}
+
+/* IPA text */
+#result p {
+  margin: 1rem 0;
+  word-break: break-all;
+}
+
+/* Mobile-specific styles */
+@media (max-width: 480px) {
+  body {
+    padding: 0.5rem;
+  }
+  
+  h1 {
+    font-size: 1.8rem;
+    margin: 0.5rem 0;
+  }
+  
+  .search-container {
+    padding: 0 0.5rem;
+  }
+  
+  #search {
+    font-size: 1.1em;
+    padding: 10px;
+  }
+  
+  #dialectSelect {
+    width: 95vw;
+    font-size: 0.95em;
+  }
+  
+  #suggestions {
+    max-width: 95vw;
+  }
+  
+  #suggestions li {
+    padding: 10px;
+    font-size: 0.95em;
+  }
+  
+  #sentence {
+    padding: 0.75rem;
+    margin: 0.75rem 0;
+    font-size: 0.95em;
+  }
+  
+  #result {
+    margin-top: 1rem;
+    padding: 0 0.5rem;
+  }
+  
+  select {
+    width: 100%;
+    max-width: none;
+    box-sizing: border-box;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 320px) {
+  body {
+    padding: 0.25rem;
+  }
+  
+  h1 {
+    font-size: 1.5rem;
+  }
+  
+  #search {
+    width: 95vw;
+    font-size: 1em;
+  }
+  
+  #dialectSelect {
+    width: 95vw;
+    font-size: 0.9em;
+  }
+  
+  #suggestions {
+    max-width: 95vw;
+  }
+}
