@@ -13,6 +13,7 @@ input.addEventListener("input", async () => {
     selectedIndex = -1;
     suggestionsList.innerHTML = "";
     input.classList.add("no-suggestions");
+    updateWordHeadingVisibility(); // Show word heading when search is cleared
     return;
   }
 
@@ -20,6 +21,7 @@ input.addEventListener("input", async () => {
   suggestions = await res.json();
   selectedIndex = -1;
   renderSuggestions();
+  updateWordHeadingVisibility(); // Hide word heading when typing
 });
 
 input.addEventListener("keydown", async (e) => {
@@ -93,10 +95,11 @@ async function getWordInfo(word) {
 
   if (!data.examples || !data.examples.length) {
     resultDiv.innerHTML = `
-      <h2>${data.word}</h2>
+      <h2 class="word-heading" style="display: none;">${data.word}</h2>
       <p><strong>IPA:</strong> ${ipa}</p>
       <p>No audio examples available.</p>
     `;
+    updateWordHeadingVisibility();
     return;
   }
 
@@ -107,7 +110,7 @@ async function getWordInfo(word) {
   const selected = data.examples[selectedExample];
 
   resultDiv.innerHTML = `
-    <h2>${data.word}</h2>
+    <h2 class="word-heading" style="display: none;">${data.word}</h2>
     <p><strong>IPA:</strong> ${ipa}</p>
 
     <label for="exampleSelect">Choose Example:</label>
@@ -118,6 +121,8 @@ async function getWordInfo(word) {
       Your browser does not support the audio element.
     </audio>
   `;
+
+  updateWordHeadingVisibility();
 
   const select = document.getElementById("exampleSelect");
   const sentence = document.getElementById("sentence");
@@ -130,21 +135,16 @@ async function getWordInfo(word) {
   });
 }
 
-// Helper function to get readable dialect names
-function getDialectDisplayName(dialectKey) {
-  const dialectNames = {
-    'e_written': 'Eastern (Written)',
-    'e_spoken': 'Eastern (Spoken)',
-    'n_written': 'Northern (Written)', 
-    'n_spoken': 'Northern (Spoken)',
-    'sw_written': 'South-Western (Written)',
-    'sw_spoken': 'South-Western (Spoken)',
-    't_written': 'Trøndelag (Written)',
-    't_spoken': 'Trøndelag (Spoken)',
-    'w_written': 'Western (Written)',
-    'w_spoken': 'Western (Spoken)'
-  };
-  return dialectNames[dialectKey] || dialectKey;
+// Helper function to show/hide word heading based on search input
+function updateWordHeadingVisibility() {
+  const wordHeading = resultDiv.querySelector('.word-heading');
+  if (wordHeading) {
+    if (input.value.trim() === '') {
+      wordHeading.style.display = 'block';
+    } else {
+      wordHeading.style.display = 'none';
+    }
+  }
 }
 
 // Add event listener for dialect changes to update current word
