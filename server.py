@@ -17,6 +17,7 @@ import phonetisaurus_g2p_py
 import sqlite3
 import threading
 import re
+import os
 from urllib.parse import unquote
 
 SAMTALE_DB = 'data/nb_samtale/wordlist.db'
@@ -39,7 +40,7 @@ def sanitize_word(query):
     return sanitized[:100].strip()
 
 def sanitize_filename(filename):
-    """Lightweight filename sanitization focused on URL decoding and basic validation"""
+    """Sanitize filename to prevent directory traversal attacks"""
     if not filename:
         return ''
     
@@ -48,6 +49,12 @@ def sanitize_filename(filename):
     
     # Remove null bytes which can cause issues
     filename = filename.replace('\0', '')
+    
+    # Remove path traversal attempts
+    filename = filename.replace('..', '').replace('\\', '')
+    
+    # Remove leading slashes and clean up multiple slashes
+    filename = filename.lstrip('/').replace('//', '/')
     
     # Limit length to prevent potential DoS
     return filename[:255].strip()
@@ -133,8 +140,15 @@ def data(filename):
     if not sanitized_filename:
         abort(400, description="Invalid filename")
     
-    # Let Flask's send_from_directory handle the rest of the security
-    # It will automatically prevent directory traversal and validate the path
+    # Additional security check: ensure the resolved path stays within data directory
+    full_path = os.path.join('data', sanitized_filename)
+    normalized_path = os.path.normpath(full_path)
+    
+    # Ensure the path doesn't escape the data directory
+    if not normalized_path.startswith('data/'):
+        abort(403, description="Access denied")
+    
+    # Let Flask's send_from_directory handle the rest + check file exists
     try:
         return send_from_directory('data', sanitized_filename)
     except FileNotFoundError:
