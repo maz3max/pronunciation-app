@@ -84,6 +84,14 @@ function renderSuggestions() {
     if (i === selectedIndex) {
       li.classList.add("highlight");
       input.value = word; // 👈 this keeps input synced with highlighted suggestion
+      
+      // Auto-scroll to keep highlighted item visible
+      setTimeout(() => {
+        li.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest'
+        });
+      }, 0);
     }
     suggestionsList.appendChild(li);
   });
