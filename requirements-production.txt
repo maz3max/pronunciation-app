@@ -1,0 +1,8 @@
+# Core application dependencies
+convert-pa==0.1
+flask==3.1.1
+phonetisaurus-g2p-py @ git+https://github.com/maz3max/phonetisaurus-g2p-py.git@6ffe5e48111af51f912ba43a121aa55cd7f29eaf
+
+# Production dependencies
+gunicorn==21.2.0
+requests==2.31.0  # For health checks

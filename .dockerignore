@@ -1,0 +1,54 @@
+# Git files
+.git
+.gitignore
+
+# Python cache
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+.pytest_cache
+.coverage
+
+# Virtual environments
+venv/
+venv2/
+env/
+ENV/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Development files
+README.md
+.env
+.env.local
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Download cache (will be recreated in container)
+download/
+
+# Large data files that might be mounted separately
+data/heinzelnisse/
+data/ordbokene/
+data/nb_samtale/data/
+data/nb_samtale/wordlist.json
+data/g2p-nb/
+*/*/__pycache__/
