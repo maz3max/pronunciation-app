@@ -8,7 +8,7 @@
 # where ipa is a dictionary with keys as dialects and values as their IPA transcriptions
 # where examples is a list of { transcription, file_name, dialect }
 
-from flask import Flask, jsonify, request, send_from_directory, g
+from flask import Flask, jsonify, request, send_from_directory
 from data.nb_uttale_leksika.autocomplete_lookup import get_suggestions
 from data.nb_uttale_leksika.ipa_lookup import get_ipa
 from data.nb_samtale.get_audio import get_audio_entry
