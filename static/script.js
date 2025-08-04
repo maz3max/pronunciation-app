@@ -105,7 +105,13 @@ async function getWordInfo(word) {
   
   // Get selected dialect
   const selectedDialect = dialectSelect.value;
-  const ipa = (data.ipa && data.ipa[selectedDialect]) ? data.ipa[selectedDialect] : "[No IPA available for selected dialect]";
+  var ipa = "[No IPA available for selected dialect]";
+
+  if (data.ipa && data.ipa[selectedDialect]) {
+    ipa = data.ipa[selectedDialect];
+  } else if (data.ipa && data.ipa['g2p']) {
+    ipa = data.ipa['g2p'] + " (generated)";
+  }
 
   if (!data.examples || !data.examples.length) {
     resultDiv.innerHTML = `

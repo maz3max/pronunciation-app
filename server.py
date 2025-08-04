@@ -12,11 +12,15 @@ from flask import Flask, jsonify, request, send_from_directory, g
 from data.nb_uttale_leksika.autocomplete_lookup import get_suggestions
 from data.nb_uttale_leksika.ipa_lookup import get_ipa
 from data.nb_samtale.get_audio import get_audio_entry
+from convert_pa import nofabet_to_ipa
+import phonetisaurus_g2p_py
 import sqlite3
 import threading
 
 SAMTALE_DB = 'data/nb_samtale/wordlist.db'
 UTTALE_DB = 'data/nb_uttale_leksika/pronunciation.db'
+
+g2p_model = phonetisaurus_g2p_py.PhonetisaurusModel('data/g2p-nb/nb_e_written.fst')
 
 app = Flask(__name__, static_folder='static', static_url_path='/')
 
@@ -58,6 +62,11 @@ def suggest():
 @app.route('/api/word/<word>', methods=['GET'])
 def word(word):
     ipa = get_ipa(word, get_uttale_db())
+    if not ipa:
+        word_nofabet = g2p_model.phonemize_word(word).phonemes
+        word_ipa = nofabet_to_ipa(word_nofabet)
+        ipa = { 'g2p' : word_ipa }
+
     samtale_entries = get_audio_entry(word, get_samtale_db())
     
     examples = []
