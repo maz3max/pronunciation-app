@@ -13,6 +13,7 @@ input.addEventListener("input", async () => {
     selectedIndex = -1;
     suggestionsList.innerHTML = "";
     input.classList.add("no-suggestions");
+    document.body.classList.remove("suggestions-visible");
     updateWordHeadingVisibility(); // Show word heading when search is cleared
     return;
   }
@@ -43,6 +44,7 @@ input.addEventListener("keydown", async (e) => {
     if (word) {
       suggestionsList.innerHTML = "";
       input.classList.add("no-suggestions");
+      document.body.classList.remove("suggestions-visible");
       await getWordInfo(word);
     }
   }
@@ -53,11 +55,13 @@ suggestionsList.addEventListener("click", (e) => {
     input.value = e.target.textContent;
     suggestionsList.innerHTML = "";
     input.classList.add("no-suggestions");
+    document.body.classList.remove("suggestions-visible");
     getWordInfo(e.target.textContent);
   } else if (e.key === "Escape") {
     selectedIndex = -1;
     suggestionsList.innerHTML = "";
     input.classList.add("no-suggestions");
+    document.body.classList.remove("suggestions-visible");
     // Optional: set input.value = previousTypedValue if you saved it
   }
 });
@@ -67,10 +71,12 @@ function renderSuggestions() {
   
   if (suggestions.length === 0) {
     input.classList.add("no-suggestions");
+    document.body.classList.remove("suggestions-visible");
     return;
   }
   
   input.classList.remove("no-suggestions");
+  document.body.classList.add("suggestions-visible");
   
   suggestions.forEach((word, i) => {
     const li = document.createElement("li");
@@ -139,7 +145,11 @@ async function getWordInfo(word) {
 function updateWordHeadingVisibility() {
   const wordHeading = resultDiv.querySelector('.word-heading');
   if (wordHeading) {
-    if (input.value.trim() === '') {
+    const currentWord = wordHeading.textContent.trim().toLowerCase();
+    const searchValue = input.value.trim().toLowerCase();
+    
+    // Show heading if search is empty OR if search doesn't match the current word
+    if (searchValue === '' || searchValue !== currentWord) {
       wordHeading.style.display = 'block';
     } else {
       wordHeading.style.display = 'none';

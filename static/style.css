@@ -25,10 +25,18 @@ h1 {
   align-items: center;
 }
 
+/* Push all content below search down when suggestions are visible */
+.suggestions-visible #result,
+.suggestions-visible .dialect-selector {
+  margin-top: calc(250px + 1rem) !important;
+  transition: margin-top 0.2s ease;
+}
+
 /* Dialect selector */
 .dialect-selector {
   margin-top: 1rem;
   text-align: center;
+  transition: margin-top 0.2s ease;
 }
 
 .dialect-selector label {
