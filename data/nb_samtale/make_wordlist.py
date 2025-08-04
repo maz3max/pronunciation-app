@@ -1,5 +1,4 @@
 import json
-from collections import defaultdict
 import sqlite3
 
 metadata_files = [
@@ -46,15 +45,6 @@ def save_wordlist_to_db(wordlist):
 
 if __name__ == "__main__":
     wordlist = make_wordlist(metadata_files)
-
-    dict_wordlist = defaultdict(list)
-
-    for word, transcription, file_name, dialect in wordlist:
-        dict_wordlist[word].append((transcription, file_name, dialect))
-
-    with open('wordlist.json', 'w', encoding='utf-8') as f:
-        json.dump(dict_wordlist, f, ensure_ascii=False, indent=4)
-    print("Wordlist created and saved to 'wordlist.json'.")
 
     save_wordlist_to_db(wordlist)
     print("Wordlist saved to 'wordlist.db'.")
