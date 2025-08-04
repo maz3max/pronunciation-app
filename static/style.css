@@ -199,8 +199,17 @@ button:hover {
   border-left: 3px solid #007acc;
   border-radius: 0 8px 8px 0;
   text-align: left;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
+  white-space: normal;
+  overflow-x: auto;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+  hyphens: none !important;
+  word-wrap: normal !important;
+  -webkit-hyphens: none !important;
+  -ms-hyphens: none !important;
+  -moz-hyphens: none !important;
+  line-break: strict;
+  word-spacing: normal;
 }
 
 /* Labels */
