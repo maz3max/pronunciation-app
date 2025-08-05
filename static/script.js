@@ -68,23 +68,23 @@ suggestionsList.addEventListener("click", (e) => {
 
 function renderSuggestions() {
   suggestionsList.innerHTML = "";
-  
+
   if (suggestions.length === 0) {
     input.classList.add("no-suggestions");
     document.body.classList.remove("suggestions-visible");
     return;
   }
-  
+
   input.classList.remove("no-suggestions");
   document.body.classList.add("suggestions-visible");
-  
+
   suggestions.forEach((word, i) => {
     const li = document.createElement("li");
     li.textContent = word;
     if (i === selectedIndex) {
       li.classList.add("highlight");
       input.value = word; // 👈 this keeps input synced with highlighted suggestion
-      
+
       // Auto-scroll to keep highlighted item visible
       setTimeout(() => {
         li.scrollIntoView({
@@ -99,12 +99,13 @@ function renderSuggestions() {
 
 
 async function getWordInfo(word) {
-  const res = await fetch(`/api/word/${encodeURIComponent(word)}`);
-  const data = await res.json();
-  console.log(`/api/word/${word} response:`, data);
-  
   // Get selected dialect
   const selectedDialect = dialectSelect.value;
+
+  const res = await fetch(`/api/word/${encodeURIComponent(word)}?dialect=${encodeURIComponent(selectedDialect)}`);
+  const data = await res.json();
+  console.log(`/api/word/${word} response:`, data);
+
   var ipa = "[No IPA available for selected dialect]";
 
   if (data.ipa && data.ipa[selectedDialect]) {
@@ -161,7 +162,7 @@ function updateWordHeadingVisibility() {
   if (wordHeading) {
     const currentWord = wordHeading.textContent.trim().toLowerCase();
     const searchValue = input.value.trim().toLowerCase();
-    
+
     // Show heading if search is empty OR if search doesn't match the current word
     if (searchValue === '' || searchValue !== currentWord) {
       wordHeading.style.display = 'block';

@@ -24,7 +24,19 @@ from urllib.parse import unquote
 SAMTALE_DB = 'data/nb_samtale/wordlist.db'
 UTTALE_DB = 'data/nb_uttale_leksika/pronunciation.db'
 
-g2p_model = phonetisaurus_g2p_py.PhonetisaurusModel('data/g2p-nb/nb_e_written.fst')
+# Load all G2P models at startup
+g2p_models = {
+    'e_written': phonetisaurus_g2p_py.PhonetisaurusModel('data/g2p-nb/nb_e_written.fst'),
+    'e_spoken': phonetisaurus_g2p_py.PhonetisaurusModel('data/g2p-nb/nb_e_spoken.fst'),
+    'n_written': phonetisaurus_g2p_py.PhonetisaurusModel('data/g2p-nb/nb_n_written.fst'),
+    'n_spoken': phonetisaurus_g2p_py.PhonetisaurusModel('data/g2p-nb/nb_n_spoken.fst'),
+    'sw_written': phonetisaurus_g2p_py.PhonetisaurusModel('data/g2p-nb/nb_sw_written.fst'),
+    'sw_spoken': phonetisaurus_g2p_py.PhonetisaurusModel('data/g2p-nb/nb_sw_spoken.fst'),
+    't_written': phonetisaurus_g2p_py.PhonetisaurusModel('data/g2p-nb/nb_t_written.fst'),
+    't_spoken': phonetisaurus_g2p_py.PhonetisaurusModel('data/g2p-nb/nb_t_spoken.fst'),
+    'w_written': phonetisaurus_g2p_py.PhonetisaurusModel('data/g2p-nb/nb_w_written.fst'),
+    'w_spoken': phonetisaurus_g2p_py.PhonetisaurusModel('data/g2p-nb/nb_w_spoken.fst'),
+}
 
 app = Flask(__name__, static_folder='static', static_url_path='/')
 
@@ -111,12 +123,23 @@ def word(word):
     if not sanitized_word:
         abort(400, description="Invalid word parameter")
 
+    # Get dialect parameter, default to 'e_written'
+    dialect = request.args.get('dialect', 'e_written')
+
+    # Validate dialect parameter
+    if dialect not in g2p_models:
+        abort(400, description="Invalid dialect parameter")
+
     ipa = get_ipa(sanitized_word, get_uttale_db())
     if not ipa:
         try:
-            word_nofabet = g2p_model.phonemize_word(sanitized_word).phonemes
-            word_ipa = nofabet_to_ipa(word_nofabet)
-            ipa = { 'g2p' : word_ipa }
+            # Use the appropriate G2P model for the selected dialect
+            if dialect in g2p_models:
+                word_nofabet = g2p_models[dialect].phonemize_word(sanitized_word).phonemes
+                word_ipa = nofabet_to_ipa(word_nofabet)
+                ipa = { 'g2p' : word_ipa }
+            else:
+                ipa = { 'error': f'G2P model for dialect {dialect} not available' }
         except Exception as e:
             # Handle potential errors from g2p model
             ipa = { 'error': 'Could not generate pronunciation' }
