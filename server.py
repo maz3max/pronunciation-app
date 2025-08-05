@@ -11,6 +11,7 @@
 from flask import Flask, jsonify, request, send_from_directory, abort
 from data.nb_uttale_leksika.autocomplete_lookup import get_suggestions
 from data.nb_uttale_leksika.ipa_lookup import get_ipa
+from data.nb_uttale_leksika.trie import create_trie_from_db, lookup_in_trie
 from data.nb_samtale.get_audio import get_audio_entry
 from convert_pa import nofabet_to_ipa
 import phonetisaurus_g2p_py
@@ -27,15 +28,17 @@ g2p_model = phonetisaurus_g2p_py.PhonetisaurusModel('data/g2p-nb/nb_e_written.fs
 
 app = Flask(__name__, static_folder='static', static_url_path='/')
 
+trie = create_trie_from_db(UTTALE_DB)
+
 # Input sanitization functions
 def sanitize_word(query):
     """Sanitize search query input"""
     if not query:
         return ''
-    
+
     # Remove potentially dangerous characters, keep letters, numbers, and common punctuation
     sanitized = re.sub(r'[^\w\-\'æøåÆØÅ]', '', query)
-    
+
     # Limit length to prevent DoS
     return sanitized[:100].strip()
 
@@ -43,19 +46,19 @@ def sanitize_filename(filename):
     """Sanitize filename to prevent directory traversal attacks"""
     if not filename:
         return ''
-    
+
     # URL decode the filename (this is the main security issue)
     filename = unquote(filename)
-    
+
     # Remove null bytes which can cause issues
     filename = filename.replace('\0', '')
-    
+
     # Remove path traversal attempts
     filename = filename.replace('..', '').replace('\\', '')
-    
+
     # Remove leading slashes and clean up multiple slashes
     filename = filename.lstrip('/').replace('//', '/')
-    
+
     # Limit length to prevent potential DoS
     return filename[:255].strip()
 
@@ -96,18 +99,18 @@ def suggest():
     # Return empty list if query is empty after sanitization
     if not sanitized_query:
         return jsonify([])
-    
-    suggestions = get_suggestions(sanitized_query, get_uttale_db())
+
+    suggestions = lookup_in_trie(trie, sanitized_query)[:10]
     return jsonify(suggestions)
 
 @app.route('/api/word/<word>', methods=['GET'])
 def word(word):
     sanitized_word = sanitize_word(word)
-    
+
     # Return 400 if word is empty after sanitization
     if not sanitized_word:
         abort(400, description="Invalid word parameter")
-    
+
     ipa = get_ipa(sanitized_word, get_uttale_db())
     if not ipa:
         try:
@@ -119,7 +122,7 @@ def word(word):
             ipa = { 'error': 'Could not generate pronunciation' }
 
     samtale_entries = get_audio_entry(sanitized_word, get_samtale_db())
-    
+
     examples = []
     for entry_word, transcription, file_name, dialect in samtale_entries:
         # Sanitize the file_name from database as well
@@ -135,19 +138,19 @@ def word(word):
 @app.route('/data/<path:filename>', methods=['GET'])
 def data(filename):
     sanitized_filename = sanitize_filename(filename)
-    
+
     # Return 400 if filename is empty after sanitization
     if not sanitized_filename:
         abort(400, description="Invalid filename")
-    
+
     # Additional security check: ensure the resolved path stays within data directory
     full_path = os.path.join('data', sanitized_filename)
     normalized_path = os.path.normpath(full_path)
-    
+
     # Ensure the path doesn't escape the data directory
     if not normalized_path.startswith('data/'):
         abort(403, description="Access denied")
-    
+
     # Let Flask's send_from_directory handle the rest + check file exists
     try:
         return send_from_directory('data', sanitized_filename)

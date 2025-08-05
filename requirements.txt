@@ -1,3 +1,4 @@
 convert-pa==0.1
 flask==3.1.1
+marisa-trie==1.2.1
 phonetisaurus-g2p-py @ git+https://github.com/maz3max/phonetisaurus-g2p-py.git@6ffe5e48111af51f912ba43a121aa55cd7f29eaf
