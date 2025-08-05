@@ -39,7 +39,8 @@ Try it at: `http://localhost:3000` (after setup)
 
 - Python 3.9+
 - Git
-- 2GB+ free disk space (for models and data)
+- 5GB+ free disk space (for models and data)
+- Rust
 
 ### Installation
 
@@ -51,19 +52,21 @@ Try it at: `http://localhost:3000` (after setup)
 
 2. **Install dependencies:**
    ```bash
+   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
    pip install -r requirements.txt
    ```
 
 3. **Download required data and models:**
    ```bash
-   chmod +x download_resources.bash
-   ./download_resources.bash
+   bash download_resources.bash
    ```
 
-   This will download:
-   - G2P models for all dialects (~500MB)
-   - Pronunciation database (~50MB)
-   - Audio examples and metadata (~1GB)
+   This will download/prepare:
+   ```
+   1,2G    data/g2p-nb
+   2,7G    data/nb_samtale
+   198M    data/nb_uttale_leksika
+   ```
 
 4. **Run the application:**
    ```bash

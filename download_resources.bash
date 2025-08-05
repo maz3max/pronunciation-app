@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # download and unpack G2P models
 mkdir -p data/g2p-nb
 wget -P download -c https://github.com/Sprakbanken/g2p-nb/releases/download/v2.0/models.zip
