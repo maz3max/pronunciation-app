@@ -2,3 +2,8 @@ data/ordbokene/
 data/heinzelnisse/
 __pycache__/
 data/g2p-nb/
+data/nb_samtale/
+data/nb_uttale_leksika/
+download/
+models/
+.env/
