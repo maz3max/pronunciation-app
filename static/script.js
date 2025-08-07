@@ -18,7 +18,7 @@ input.addEventListener("input", async () => {
     return;
   }
 
-  const res = await fetch(`/api/suggest?q=${encodeURIComponent(q)}`);
+  const res = await fetch(`api/suggest?q=${encodeURIComponent(q)}`);
   suggestions = await res.json();
   selectedIndex = -1;
   renderSuggestions();
@@ -102,9 +102,9 @@ async function getWordInfo(word) {
   // Get selected dialect
   const selectedDialect = dialectSelect.value;
 
-  const res = await fetch(`/api/word/${encodeURIComponent(word)}?dialect=${encodeURIComponent(selectedDialect)}`);
+  const res = await fetch(`api/word/${encodeURIComponent(word)}?dialect=${encodeURIComponent(selectedDialect)}`);
   const data = await res.json();
-  console.log(`/api/word/${word} response:`, data);
+  console.log(`api/word/${word} response:`, data);
 
   var ipa = "[No IPA available for selected dialect]";
 
