@@ -9,7 +9,6 @@
 # where examples is a list of { transcription, file_name, dialect }
 
 from flask import Flask, jsonify, request, send_from_directory, abort
-from data.nb_uttale_leksika.autocomplete_lookup import get_suggestions
 from data.nb_uttale_leksika.ipa_lookup import get_ipa
 from data.nb_uttale_leksika.trie import create_trie_from_db, lookup_in_trie
 from data.nb_samtale.get_audio import get_audio_entry
