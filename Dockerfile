@@ -40,10 +40,8 @@ COPY . .
 # Create necessary directories and download resources using existing script
 RUN mkdir -p data/g2p-nb data/nb_samtale download && \
     chmod +x download_resources.bash && \
-    ./download_resources.bash
+    ./download_resources.bash && chown -R app:app /app
 
-# Set proper ownership and permissions
-RUN chown -R app:app /app
 USER app
 
 # Expose port

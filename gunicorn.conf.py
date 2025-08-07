@@ -4,7 +4,7 @@
 bind = "0.0.0.0:8000"
 
 # Worker processes
-workers = 4
+workers = 2
 worker_class = "sync"
 worker_connections = 1000
 
